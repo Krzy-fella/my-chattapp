@@ -1,35 +1,21 @@
-import { auth, db } from './firebase.js';
-import { signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+// Import Firebase core
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-
-const enterBtn = document.getElementById('enter');
-
-
-enterBtn.onclick = async () => {
-const username = document.getElementById('username').value;
-const pin = document.getElementById('pin').value;
-
-
-if (!username || !pin) return alert('Fill all fields');
-
-
-await signInAnonymously(auth);
-
-
-const userRef = doc(db, 'users', username);
-const snap = await getDoc(userRef);
-
-
-if (!snap.exists()) {
-// New user
-await setDoc(userRef, { pin });
-} else {
-// Old user
-if (snap.data().pin !== pin) return alert('Wrong PIN');
-}
-
-
-localStorage.setItem('user', username);
-window.location = 'chat.html';
+// Your Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSy...",
+  authDomain: "chat-app-a4c5f.firebaseapp.com",
+  projectId: "chat-app-a4c5f",
+  storageBucket: "chat-app-a4c5f.appspot.com",
+  messagingSenderId: "897184775926",
+  appId: "1:897184775926:web:8348fbc8da33a1325f76d7"
 };
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+// Export services
+export const auth = getAuth(app);
+export const db = getFirestore(app);
